@@ -1,0 +1,4 @@
+What is artificial intelligence?|Artificial Intelligence is the simulation of human intelligence in machines.
+How do I reset my password?|To reset your password, go to settings and click on 'Forgot Password'.
+What are your working hours?|Our working hours are 9 AM to 6 PM, Monday to Friday.
+Who created you?|I am a simple FAQ chatbot created for an AI internship.
