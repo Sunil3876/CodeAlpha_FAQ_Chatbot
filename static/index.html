@@ -4,138 +4,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise AI Assistant</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>FAQ ChatBot API Test</title>
     <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 5px;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
 
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #1f2937;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #4b5563;
+        #chat-container {
+            width: 450px;
+            background: #ffffff;
             border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #chat-header {
+            background-color: #007acc;
+            /* VS Code Blue theme */
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        #chat-history {
+            padding: 20px;
+            height: 350px;
+            overflow-y: auto;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            max-width: 80%;
+            word-wrap: break-word;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        .user-message {
+            background-color: #007acc;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+
+        .bot-message {
+            background-color: #e2e8f0;
+            color: #333;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+
+        #input-container {
+            display: flex;
+            padding: 15px;
+            background: #fff;
+            border-top: 1px solid #dee2e6;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        #user-input:focus {
+            border-color: #007acc;
+        }
+
+        #send-btn {
+            padding: 10px 20px;
+            border: none;
+            background: #007acc;
+            color: white;
+            margin-left: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        #send-btn:hover {
+            background: #005f9e;
         }
     </style>
 </head>
 
-<body class="bg-gray-950 text-gray-100 font-sans flex items-center justify-center min-h-screen p-4">
+<body>
 
-    <div
-        class="w-full max-w-lg bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[600px]">
-
-        <div class="bg-gray-800/50 p-4 border-b border-gray-800 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
-                <div>
-                    <h1 class="text-md font-bold tracking-wide">TechCorp AI Support</h1>
-                    <p class="text-xs text-gray-400">Semantic RAG Engine Active</p>
-                </div>
-            </div>
-            <span class="text-xs bg-gray-700 px-2 py-1 rounded text-gray-300 font-mono">v2.0</span>
+    <div id="chat-container">
+        <div id="chat-header">FAQ AI Support</div>
+        <div id="chat-history">
+            <div class="message bot-message">Hello! Ask any question regarding the FAQs.</div>
         </div>
-
-        <div id="chat-box" class="flex-1 p-4 overflow-y-auto space-y-4 custom-scrollbar">
-            <div class="flex justify-start">
-                <div class="bg-gray-800 text-gray-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm shadow-md">
-                    Hello! I am your advanced AI Assistant. Ask me anything about accounts, refunds, shipping, or
-                    technical support.
-                </div>
-            </div>
-        </div>
-
-        <div id="typing-indicator" class="px-4 py-2 hidden">
-            <div class="flex items-center gap-1 bg-gray-800/40 w-16 p-2 rounded-xl justify-center">
-                <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms;"></div>
-                <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms;"></div>
-                <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms;"></div>
-            </div>
-        </div>
-
-        <div class="p-3 border-t border-gray-800 bg-gray-900/50">
-            <div class="flex gap-2">
-                <input type="text" id="user-input"
-                    class="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors"
-                    placeholder="Type your enterprise query...">
-                <button onclick="sendMessage()"
-                    class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm transition-all shadow-lg active:scale-95 cursor-pointer">
-                    Send
-                </button>
-            </div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
+            <button id="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 
     <script>
-        const chatBox = document.getElementById("chat-box");
-        const userInput = document.getElementById("user-input");
-        const typingIndicator = document.getElementById("typing-indicator");
-
-        // Listen for Enter Key
-        userInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") sendMessage();
-        });
-
         async function sendMessage() {
-            const message = userInput.value.trim();
+            const inputField = document.getElementById('user-input');
+            const message = inputField.value.trim();
             if (!message) return;
 
-            // 1. Render User Message
-            userInput.value = "";
-            chatBox.innerHTML += `
-                <div class="flex justify-end">
-                    <div class="bg-emerald-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] text-sm shadow-md">
-                        ${message}
-                    </div>
-                </div>
-            `;
-            scrollToBottom();
-
-            // 2. Show Typing Indicator
-            typingIndicator.classList.remove("hidden");
-            scrollToBottom();
+            // Display user message
+            appendMessage(message, 'user-message');
+            inputField.value = '';
 
             try {
-                // 3. API Call to FastAPI Backend
-                const response = await fetch("/api/chat", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                // Call the FastAPI backend
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: message })
                 });
 
                 const data = await response.json();
 
-                // Hide Typing Indicator
-                typingIndicator.classList.add("hidden");
-
-                // 4. Render Bot Response
-                chatBox.innerHTML += `
-                    <div class="flex justify-start">
-                        <div class="bg-gray-800 text-gray-100 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm shadow-md border border-gray-700/50">
-                            ${data.response}
-                            ${data.match_score ? `<div class="text-[10px] text-gray-500 mt-2 font-mono">Distance Score: ${data.match_score.toFixed(4)}</div>` : ''}
-                        </div>
-                    </div>
-                `;
+                // Display bot response
+                if (response.ok) {
+                    appendMessage(data.response, 'bot-message');
+                } else {
+                    appendMessage("Error: " + (data.detail || "Unknown error"), 'bot-message');
+                }
             } catch (error) {
-                typingIndicator.classList.add("hidden");
-                chatBox.innerHTML += `
-                    <div class="flex justify-start">
-                        <div class="bg-red-900/50 text-red-200 border border-red-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm">
-                            Error: Unable to connect to system engine.
-                        </div>
-                    </div>
-                `;
+                appendMessage("Connection error. Ensure the backend server is running.", 'bot-message');
             }
-            scrollToBottom();
         }
 
-        function scrollToBottom() {
-            chatBox.scrollTop = chatBox.scrollHeight;
+        function appendMessage(text, className) {
+            const chatHistory = document.getElementById('chat-history');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message ' + className;
+            msgDiv.textContent = text;
+            chatHistory.appendChild(msgDiv);
+
+            // Auto-scroll to the bottom
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
         }
     </script>
+
 </body>
 
 </html>
